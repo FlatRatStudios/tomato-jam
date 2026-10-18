@@ -912,6 +912,9 @@ func _try_harvest(tile: Vector2i) -> bool:
 	return true
 
 func _try_place_tower(tile: Vector2i) -> bool:
+	var seed_id: String = game_state.active_seed_id
+	if seed_id != game_state.TOMATO_SEED_ID:
+		return false
 	if not _can_place_item(tile, game_state.FRUIT_ITEM_ID):
 		return false
 	if not game_state.frog_slot_has_item(inventory_ui.selected_frog_slot, game_state.FRUIT_ITEM_ID):

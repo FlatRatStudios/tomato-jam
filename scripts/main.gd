@@ -743,12 +743,12 @@ func _process(_delta: float) -> void:
 	var preview_scale := Vector2.ZERO
 	var preview_node: Node2D = placement_preview
 	var tomato_is_selected: bool = false
+	var active_seed_id: String = game_state.active_seed_id
 	if inventory_ui != null and inventory_ui.is_node_ready():
 		var selected_item: Dictionary = game_state.frog_inventory[inventory_ui.selected_frog_slot]
 		var selected_item_id: String = selected_item.get("id", "") if not selected_item.is_empty() else ""
 		tomato_is_selected = selected_item_id == game_state.FRUIT_ITEM_ID
-		if game_state.get_seed_count(game_state.active_seed_id) > 0 and not hover_is_harvest_target:
-			var active_seed_id: String = game_state.active_seed_id
+		if game_state.get_seed_count(active_seed_id) > 0 and not hover_is_harvest_target:
 			hover_is_valid = _can_place_item(hovered_tile, active_seed_id)
 			if active_seed_id == game_state.TOMATO_SEED_ID:
 				if tomato_is_selected and not _is_tilled_soil(hovered_tile):
@@ -797,7 +797,10 @@ func _process(_delta: float) -> void:
 			preview_node.scale = preview_scale
 		else:
 			preview_node.scale = plant_preview_scale
-	placement_range_preview.visible = tomato_is_selected and _can_place_item(hovered_tile, game_state.FRUIT_ITEM_ID)
+	var display_corn_tower_radius: bool = active_seed_id == game_state.CORN_SEED_ID and _can_place_item(hovered_tile, game_state.CORN_SEED_ID) and game_state.get_seed_count(game_state.CORN_SEED_ID)
+	var display_tomato_tower_radius: bool = tomato_is_selected and _can_place_item(hovered_tile, game_state.FRUIT_ITEM_ID) and active_seed_id == game_state.TOMATO_SEED_ID
+	var display_tower_radius: bool = display_tomato_tower_radius or display_corn_tower_radius
+	placement_range_preview.visible = display_tower_radius
 	if placement_range_preview.visible:
 		placement_range_preview.global_position = _cell_center(hovered_tile)
 	highlight.set_target_tile(

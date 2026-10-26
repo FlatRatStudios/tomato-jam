@@ -97,9 +97,10 @@ func _update_propeller_hat(_delta: float) -> void:
 		return
 	var frame_index: int = player_sprite.frame
 	var y_offset: float = 0.0
+	var extra_hat_offset: float = -14.0 if hat_sprite.visible else 0.0
 	var lean: float = 0.0
 	if frame_index >= 0 and frame_index < HAT_BOB_OFFSETS.size():
-		y_offset = float(HAT_BOB_OFFSETS[frame_index]) * player_sprite.scale.y
+		y_offset = float(HAT_BOB_OFFSETS[frame_index]) * player_sprite.scale.y + extra_hat_offset
 		lean = float(HAT_LEAN_OFFSETS[frame_index]) * player_sprite.scale.x
 		if not player_sprite.flip_h:
 			lean = -lean

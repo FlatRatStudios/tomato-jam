@@ -3,61 +3,140 @@
 [ext_resource type="Texture2D" uid="uid://dluoiye2tkt1i" path="res://icon.svg" id="1_icon"]
 [ext_resource type="Script" uid="uid://dcdr7rnt8lgtv" path="res://scripts/tower.gd" id="2_tower"]
 [ext_resource type="Texture2D" uid="uid://dcygkxkmwoq0q" path="res://assets/Corn-Tower.png" id="3_corn"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_corn_idle"]
-atlas = ExtResource("3_corn")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_corn_shoot"]
-atlas = ExtResource("3_corn")
-region = Rect2(32, 0, 32, 32)
+[ext_resource type="Texture2D" uid="uid://8wwgw86q8tlj" path="res://assets/CornTowerIdle.png" id="4_8nc2i"]
+[ext_resource type="Texture2D" uid="uid://be35cewb54eg1" path="res://assets/Corn tower attack.png" id="4_s8as0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_corn_death"]
 atlas = ExtResource("3_corn")
 region = Rect2(64, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2xw6s"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cevim"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0uhy"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2dex7"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdrf0"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i8jfx"]
+atlas = ExtResource("4_8nc2i")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8nc2i"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xf41f"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_02dn5"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rv4i8"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37ht3"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_agle2"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tc3oq"]
+atlas = ExtResource("4_s8as0")
+region = Rect2(192, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_corn"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_corn_idle")
+"texture": SubResource("AtlasTexture_corn_death")
 }],
-"loop": true,
+"loop": 0,
+"name": &"Death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2xw6s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cevim")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0uhy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2dex7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdrf0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i8jfx")
+}],
+"loop": 1,
 "name": &"Idle",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_corn_shoot")
-}],
-"loop": true,
-"name": &"Shooting",
-"speed": 5.0
+"texture": SubResource("AtlasTexture_8nc2i")
 }, {
-"frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_corn_death")
+"texture": SubResource("AtlasTexture_xf41f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_02dn5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rv4i8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37ht3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_agle2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tc3oq")
 }],
-"loop": false,
-"name": &"Death",
-"speed": 5.0
+"loop": 1,
+"name": &"Shooting",
+"speed": 10.0
 }]
 
-[node name="Tower" type="Node2D"]
+[node name="Tower" type="Node2D" unique_id=1971937391]
 script = ExtResource("2_tower")
 range = 320.0
 projectile_damage = 5.0
 invert_facing = true
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1755206696]
 visible = false
 scale = Vector2(0.22, 0.22)
 texture = ExtResource("1_icon")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=882544476]
 position = Vector2(6.36, 0)
 scale = Vector2(1.68, 1.68)
 sprite_frames = SubResource("SpriteFrames_corn")
-animation = &"Idle"
+animation = &"Shooting"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

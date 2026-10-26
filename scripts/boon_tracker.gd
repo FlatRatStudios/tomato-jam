@@ -96,6 +96,10 @@ func _add_icon(boon_id: String) -> void:
 	var info := _extract_card_info(boon_id)
 	if info.is_empty():
 		return
+	var icon_exists = func(slot_icon: Node) -> bool:
+		return slot_icon.get_meta("boon_id") == boon_id
+	if (slots.get_children().any(icon_exists)):
+		return
 	var icon := TextureRect.new()
 	# Tag the icon with its boon id so `_on_boon_deactivated` can find and
 	# remove it. We can't use `name` because Godot strips `:` and `/`.

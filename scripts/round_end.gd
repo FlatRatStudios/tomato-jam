@@ -172,6 +172,11 @@ func _filter_owned_boons(entries: Array) -> Array:
 		var path: String = entry.get("path", "")
 		if path.is_empty() or not game_state.has_boon(path):
 			filtered.append(entry)
+		elif "corn_seeds" in path and game_state.seed_counts[game_state.CORN_SEED_ID] < game_state.get_seed_max(game_state.CORN_SEED_ID):
+			filtered.append(entry)
+		elif "pumpkin_seeds" in path and game_state.seed_counts[game_state.PUMPKIN_SEED_ID] < game_state.get_seed_max(game_state.PUMPKIN_SEED_ID):
+			filtered.append(entry)
+			
 	return filtered
 
 ## Draws `count` boons from the supplied pool using rarity weights. Sampling is

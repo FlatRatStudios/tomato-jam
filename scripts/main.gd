@@ -13,6 +13,7 @@ const PLANT_SCENE := preload("res://scenes/plant.tscn")
 const TOWER_SCENE := preload("res://scenes/tower.tscn")
 const CORN_TOWER_SCENE := preload("res://scenes/corn_tower.tscn")
 const PUMPKIN_WALL_SCENE := preload("res://scenes/pumpkin_wall.tscn")
+const NAIL_PROJECTILE_SCENE: = preload("res://scenes/boons/visible_boons/nail_projectile.tscn")
 const ENEMY_SCENE := preload("res://scenes/enemy.tscn")
 const ENEMY_SCENES: Array[PackedScene] = [
 	preload("res://scenes/enemies/enemy_caterpillar.tscn"),
@@ -45,8 +46,7 @@ const TILLED_SOIL_HITS := 3
 # Nail boon knobs. Every NAIL_INTERVAL seconds any enemy within
 # NAIL_RADIUS_TILES of the frog takes NAIL_DAMAGE HP.
 const NAIL_INTERVAL := 15.0
-const NAIL_RADIUS_TILES := 2.0
-const NAIL_DAMAGE := 5.0
+const NAIL_COUNT: int = 16
 const PROPELLER_INTERVAL := 8.0
 const PROPELLER_RADIUS_TILES := 4.0
 const PROPELLER_PUSH_DISTANCE := 48.0
@@ -1112,20 +1112,18 @@ func _tick_nail_pulse(delta: float) -> void:
 	if _nail_cooldown > 0.0:
 		return
 	_nail_cooldown = NAIL_INTERVAL
-	var tile_size_px: float = float(Vector2(map.tile_set.tile_size).x) * float(map.scale.x)
-	var radius_px: float = tile_size_px * NAIL_RADIUS_TILES
 	var origin := player.global_position
-	var hit_any := false
-	for enemy in get_tree().get_nodes_in_group("enemies"):
-		if not is_instance_valid(enemy) or not enemy is Node2D:
-			continue
-		if origin.distance_to((enemy as Node2D).global_position) > radius_px:
-			continue
-		if enemy.has_method("take_damage"):
-			enemy.take_damage(NAIL_DAMAGE)
-			hit_any = true
-	if hit_any:
-		_play_nail_pulse_effect(origin, radius_px)
+
+	var nail_projectile_directions: Array[float] = []
+	for x in range(NAIL_COUNT):
+		nail_projectile_directions.append(x * PI / (NAIL_COUNT / 2))
+	
+	for direction in nail_projectile_directions:
+		var nail := NAIL_PROJECTILE_SCENE.instantiate()
+		nail.global_position = origin
+		nail.source = player
+		nail.set_direction(Vector2.from_angle(direction))
+		add_child(nail)
 
 func _tick_propeller_hat(delta: float) -> void:
 	_propeller_cooldown -= delta

@@ -42,8 +42,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_crow"]
 size = Vector2(20, 16)
 
-[node name="Enemy" unique_id=371982480 instance=ExtResource("1_dq7g4")]
+[node name="Enemy2" unique_id=371982480 instance=ExtResource("1_dq7g4")]
 modulate = Color(1, 1, 1, 1)
+collision_layer = 1
 speed = 50.0
 max_health = 50.0
 

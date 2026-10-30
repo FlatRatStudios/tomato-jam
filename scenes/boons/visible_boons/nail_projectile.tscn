@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dnw5yblbrb0gy"]
+
+[ext_resource type="Script" uid="uid://dci64phmc3uda" path="res://scripts/boons/nail_projectile.gd" id="1_uqco6"]
+[ext_resource type="Texture2D" uid="uid://weliog5porjr" path="res://assets/boons1.png" id="2_71k3p"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_poog2"]
+radius = 6.0
+height = 26.0
+
+[node name="NailProjectile" type="Area2D" unique_id=1948433972]
+collision_layer = 2
+script = ExtResource("1_uqco6")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=723590466]
+texture = ExtResource("2_71k3p")
+region_enabled = true
+region_rect = Rect2(63, 0, 32, 32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=619450576]
+shape = SubResource("CapsuleShape2D_poog2")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

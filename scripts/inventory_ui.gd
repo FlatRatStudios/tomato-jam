@@ -190,6 +190,8 @@ func _item_text(item: Dictionary) -> String:
 		return "Seeds\n×%d" % quantity
 	if item_id == game_state.FRUIT_ITEM_ID:
 		return "Tomato\n×%d" % quantity
+	if item_id == game_state.CORN_ITEM_ID:
+		return "Corn\n×%d" % quantity
 	return item_id
 
 func _on_seed_count_changed(seed_id: String, count: int, maximum: int) -> void:

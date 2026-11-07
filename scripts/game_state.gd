@@ -37,10 +37,11 @@ const SEED_DISPLAY_NAMES := {
 ## player can discover where each seed can be planted without opening a card.
 const SEED_PLACEMENT_HINTS := {
 	TOMATO_SEED_ID: "Click a tilled soil tile to plant a tomato",
-	CORN_SEED_ID: "Click a grass tile (off the enemy path) to plant",
+	CORN_SEED_ID: "Click a tilled soil tile to plant corn",
 	PUMPKIN_SEED_ID: "Click an enemy path tile to plant",
 }
 const FRUIT_ITEM_ID := "tomato"
+const CORN_ITEM_ID := "corn"
 const CHEST_ITEM_ID := "godot_logo"
 const DEFAULT_TOMATO_GOAL := 10
 

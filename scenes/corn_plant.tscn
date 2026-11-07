@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dbc8exkwlfqs8"]
+
+[ext_resource type="Script" uid="uid://bdyc5vnrs1ej2" path="res://scripts/corn_plant.gd" id="1_p5yjb"]
+[ext_resource type="Texture2D" uid="uid://bcgicebo4itmr" path="res://assets/cornPlant.png" id="2_p5yjb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljajx"]
+atlas = ExtResource("2_p5yjb")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ywb8"]
+atlas = ExtResource("2_p5yjb")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4p2pr"]
+atlas = ExtResource("2_p5yjb")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dw1k"]
+atlas = ExtResource("2_p5yjb")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2ywb8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ljajx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ywb8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4p2pr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0dw1k")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="CornPlant" type="Node2D" unique_id=224582632]
+z_index = -5
+script = ExtResource("1_p5yjb")
+
+[node name="SwayPivot" type="Node2D" parent="." unique_id=1429880015]
+position = Vector2(0, 12)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SwayPivot" unique_id=580662078]
+position = Vector2(2, -13.999999)
+scale = Vector2(3.1, 3.1)
+sprite_frames = SubResource("SpriteFrames_2ywb8")
+frame_progress = 0.72582346

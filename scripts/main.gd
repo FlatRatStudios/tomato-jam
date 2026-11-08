@@ -47,7 +47,7 @@ const TILLED_SOIL_HITS := 3
 
 # Nail boon knobs. Every NAIL_INTERVAL seconds any enemy within
 # NAIL_RADIUS_TILES of the frog takes NAIL_DAMAGE HP.
-const NAIL_INTERVAL := 15.0
+const NAIL_INTERVAL := 3.0
 const NAIL_COUNT: int = 16
 const PROPELLER_INTERVAL := 8.0
 const PROPELLER_RADIUS_TILES := 4.0

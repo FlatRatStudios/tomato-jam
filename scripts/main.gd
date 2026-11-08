@@ -11,6 +11,7 @@ const IDLE_FRAME: int = 1
 const PLOT_CENTER := Vector2(576, 324)
 const PLANT_SCENE := preload("res://scenes/plant.tscn")
 const CORN_PLANT_SCENE := preload("res://scenes/corn_plant.tscn")
+const PUMPKIN_PLANT_SCENE := preload("res://scenes/pumpkin_plant.tscn")
 const TOWER_SCENE := preload("res://scenes/tower.tscn")
 const CORN_TOWER_SCENE := preload("res://scenes/corn_tower.tscn")
 const PUMPKIN_WALL_SCENE := preload("res://scenes/pumpkin_wall.tscn")
@@ -102,6 +103,7 @@ var _pumpkin_wall_preview_texture: Texture2D
 @onready var placement_preview: Sprite2D = $PlacementPreview
 @onready var plant_preview: AnimatedSprite2D = $PlantPreview
 @onready var corn_plant_preview: AnimatedSprite2D = $CornPlantPreview
+@onready var pumpkin_plant_preview: AnimatedSprite2D = $PumpkinPlantPreview
 @onready var placement_range_preview: Node2D = $PlacementRangePreview
 @onready var game_state: Node = get_node("/root/GameState")
 @onready var run_stats: Node = get_node("/root/RunStats")
@@ -174,6 +176,15 @@ func _ready() -> void:
 	else:
 		_pumpkin_wall_preview_texture = pumpkin_body_sprite.texture
 	pumpkin_scene_instance.free()
+
+	var pumpkin_plant_scene_instance := PUMPKIN_PLANT_SCENE.instantiate()
+	var pumpkin_plant_sprite: AnimatedSprite2D = pumpkin_plant_scene_instance.get_node("SwayPivot/AnimatedSprite2D")
+	pumpkin_plant_preview.sprite_frames = pumpkin_plant_sprite.sprite_frames
+	pumpkin_plant_preview.animation = pumpkin_plant_sprite.animation
+	pumpkin_plant_preview.stop()
+	var pumpkin_plant_final_frame := pumpkin_plant_preview.sprite_frames.get_frame_count(pumpkin_plant_preview.animation) - 1
+	pumpkin_plant_preview.set_frame_and_progress(pumpkin_plant_final_frame, 0.0)
+	pumpkin_plant_scene_instance.free()
 
 	var start_cell := map.local_to_map(map.to_local(PLOT_CENTER))
 	destination = _cell_center(start_cell)
@@ -436,7 +447,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				altar.interact()
 			elif chest.can_interact_at(mouse_world_position) and chest.can_player_interact(player):
 				chest.interact()
-			elif not _try_harvest(clicked_cell) and not _try_place_tower(clicked_cell):
+			elif not _try_harvest(clicked_cell) and not _try_place_tower(clicked_cell) and not _try_place_pumpkin_wall(clicked_cell):
 				_try_plant(clicked_cell)
 		queue_redraw()
 
@@ -770,18 +781,7 @@ func _process(_delta: float) -> void:
 				game_state.CORN_SEED_ID:
 					preview_node = corn_plant_preview
 				game_state.PUMPKIN_SEED_ID:
-					preview_scale = Vector2.ONE * 2.0
-					preview_node = placement_preview
-					if _pumpkin_wall_preview_texture != null:
-						placement_preview.texture = _pumpkin_wall_preview_texture
-		elif _can_place_item(hovered_tile, game_state.PUMPKIN_SEED_ID) and active_seed_id == game_state.PUMPKIN_SEED_ID and game_state.get_seed_count(game_state.PUMPKIN_SEED_ID) > 0:
-			# Pumpkins drop a wall on the enemy path; show the wall art at
-			# the hovered tile so the preview matches what will spawn.
-			hover_is_valid = true
-			preview_scale = Vector2.ONE * 2.0
-			preview_node = placement_preview
-			if _pumpkin_wall_preview_texture != null:
-				placement_preview.texture = _pumpkin_wall_preview_texture
+					preview_node = pumpkin_plant_preview
 		else:
 			hover_is_valid = _can_place_item(hovered_tile, selected_item_id)
 			match selected_item_id:
@@ -799,9 +799,16 @@ func _process(_delta: float) -> void:
 					preview_node = placement_preview
 					if _corn_tower_preview_texture != null:
 							placement_preview.texture = _corn_tower_preview_texture
+				game_state.PUMPKIN_ITEM_ID:
+					preview_scale = Vector2.ONE * 2.0
+					preview_node = placement_preview
+					if _pumpkin_wall_preview_texture != null:
+						placement_preview.texture = _pumpkin_wall_preview_texture
+
 	placement_preview.visible = false
 	plant_preview.visible = false
 	corn_plant_preview.visible = false
+	pumpkin_plant_preview.visible= false
 	preview_node.visible = hover_is_valid and preview_scale != Vector2.ZERO
 	if preview_node.visible:
 		preview_node.global_position = _cell_center(hovered_tile)
@@ -827,21 +834,20 @@ func _can_place_item(tile: Vector2i, item_id: String) -> bool:
 		return false
 	if planted_tiles.has(tile) or tower_tiles.has(tile) or wall_tiles.has(tile):
 		return false
-	if item_id == game_state.SEED_ITEM_ID:
-		return _is_plantable(tile)
-	if item_id == game_state.CORN_SEED_ID:
-		return _is_plantable(tile)
-	if item_id == game_state.PUMPKIN_SEED_ID:
-		# Pumpkin Walls only drop on enemy path tiles so enemies path into
-		# them instead of the plot.
-		return _is_enemy_path(tile)
-	if item_id == game_state.FRUIT_ITEM_ID or item_id == game_state.CORN_ITEM_ID:
-		if altar.blocks_tower_at(tile):
+
+	match item_id:
+		game_state.SEED_ITEM_ID, game_state.CORN_SEED_ID, game_state.PUMPKIN_SEED_ID:
+			return _is_plantable(tile)
+		game_state.FRUIT_ITEM_ID, game_state.CORN_ITEM_ID:
+			if altar.blocks_tower_at(tile):
+				return false
+			if _is_tilled_soil(tile):
+				return false
+			return not _is_enemy_path(tile)
+		game_state.PUMPKIN_ITEM_ID:
+			return _is_enemy_path(tile)
+		_:
 			return false
-		if _is_tilled_soil(tile):
-			return false
-		return not _is_enemy_path(tile)
-	return false
 
 func _try_plant(tile: Vector2i) -> void:
 	var seed_id: String = game_state.active_seed_id
@@ -849,19 +855,18 @@ func _try_plant(tile: Vector2i) -> void:
 		return
 	if not game_state.consume_seed(seed_id):
 		return
+	var plant: Node2D
 	match seed_id:
 		game_state.CORN_SEED_ID:
-			var corn_plant := CORN_PLANT_SCENE.instantiate()
-			corn_plant.global_position = _cell_center(tile)
-			add_child(corn_plant)
-			planted_tiles[tile] = corn_plant
+			plant = CORN_PLANT_SCENE.instantiate()
 		game_state.PUMPKIN_SEED_ID:
-			_place_pumpkin_wall(tile)
+			plant = PUMPKIN_PLANT_SCENE.instantiate()
 		_:
-			var plant := PLANT_SCENE.instantiate()
-			plant.global_position = _cell_center(tile)
-			add_child(plant)
-			planted_tiles[tile] = plant
+			plant = PLANT_SCENE.instantiate()
+	
+	plant.global_position = _cell_center(tile)
+	add_child(plant)
+	planted_tiles[tile] = plant
 
 func _place_corn_tower(tile: Vector2i) -> void:
 	var tower := CORN_TOWER_SCENE.instantiate()
@@ -870,7 +875,18 @@ func _place_corn_tower(tile: Vector2i) -> void:
 	tower.died.connect(_on_tower_died.bind(tile))
 	tower_tiles[tile] = tower
 
-func _place_pumpkin_wall(tile: Vector2i) -> void:
+func _try_place_pumpkin_wall(tile: Vector2i) -> bool:
+	var selected_frog_slot = inventory_ui.selected_frog_slot
+	var selected_item: Dictionary = game_state.frog_inventory[selected_frog_slot]
+	var selected_item_id: String = selected_item.get("id", "") if not selected_item.is_empty() else ""
+	if selected_item_id != game_state.PUMPKIN_ITEM_ID:
+		return false
+	if not _can_place_item(tile, game_state.PUMPKIN_ITEM_ID):
+		return false
+	if not game_state.frog_slot_has_item(selected_frog_slot, game_state.PUMPKIN_ITEM_ID):
+		return false
+	if not game_state.consume_frog_item(selected_frog_slot):
+		return false
 	var wall := PUMPKIN_WALL_SCENE.instantiate()
 	wall.global_position = _cell_center(tile)
 	add_child(wall)
@@ -878,6 +894,7 @@ func _place_pumpkin_wall(tile: Vector2i) -> void:
 	# Pumpkin walls queue_free themselves on break; clear the tile record so
 	# the player can drop another one on the same path square later.
 	wall.tree_exited.connect(_on_wall_removed.bind(tile))
+	return true
 
 func _on_wall_removed(tile: Vector2i) -> void:
 	wall_tiles.erase(tile)
@@ -926,6 +943,9 @@ func _try_harvest(tile: Vector2i) -> bool:
 		var node when node is TomatoPlant:
 			seed_id = game_state.SEED_ITEM_ID
 			item_id = game_state.FRUIT_ITEM_ID
+		var node when node is PumpkinPlant:
+			seed_id = game_state.PUMPKIN_SEED_ID
+			item_id = game_state.PUMPKIN_ITEM_ID
 
 	if not game_state.add_frog_item(item_id):
 		return true
@@ -938,12 +958,9 @@ func _try_harvest(tile: Vector2i) -> bool:
 	return true
 
 func _try_place_tower(tile: Vector2i) -> bool:
-	var seed_id: String = game_state.active_seed_id
 	var selected_frog_slot = inventory_ui.selected_frog_slot
 	var selected_item: Dictionary = game_state.frog_inventory[selected_frog_slot]
 	var selected_item_id: String = selected_item.get("id", "") if not selected_item.is_empty() else ""
-	if seed_id != game_state.TOMATO_SEED_ID and seed_id != game_state.CORN_SEED_ID:
-		return false
 	if not _can_place_item(tile, game_state.FRUIT_ITEM_ID) and not _can_place_item(tile, game_state.CORN_ITEM_ID):
 		return false
 	if not game_state.frog_slot_has_item(selected_frog_slot, game_state.FRUIT_ITEM_ID) and not game_state.frog_slot_has_item(selected_frog_slot, game_state.CORN_ITEM_ID):

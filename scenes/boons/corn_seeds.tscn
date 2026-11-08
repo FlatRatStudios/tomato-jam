@@ -16,7 +16,7 @@ vertical_alignment = 1
 [node name="Item Description" parent="Card Blank" parent_id_path=PackedInt32Array(729730308) index="1" unique_id=736839144]
 offset_top = 6.7353287
 offset_bottom = 81.73533
-text = "Unlocks planting corn towers"
+text = "Unlocks corn seeds; corn can become corn towers"
 horizontal_alignment = 1
 vertical_alignment = 1
 

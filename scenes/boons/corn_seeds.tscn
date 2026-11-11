@@ -2,11 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://bfrbfa7x4r32e" path="res://scenes/boon_card.tscn" id="1_hng4c"]
 [ext_resource type="Texture2D" uid="uid://weliog5porjr" path="res://assets/boons1.png" id="2_eh7ui"]
-[ext_resource type="Script" path="res://scripts/boons/corn_seeds.gd" id="3_corn_seeds_script"]
+[ext_resource type="Script" uid="uid://bjh6pemkkbofx" path="res://scripts/boons/corn_seeds.gd" id="3_corn_seeds_script"]
 
 [node name="BoonCard" unique_id=662996127 instance=ExtResource("1_hng4c")]
 script = ExtResource("3_corn_seeds_script")
-
 
 [node name="Item Name" parent="Card Blank" parent_id_path=PackedInt32Array(729730308) index="0" unique_id=877095802]
 theme_override_font_sizes/font_size = 18
@@ -16,7 +15,7 @@ vertical_alignment = 1
 [node name="Item Description" parent="Card Blank" parent_id_path=PackedInt32Array(729730308) index="1" unique_id=736839144]
 offset_top = 6.7353287
 offset_bottom = 81.73533
-text = "Unlocks planting corn towers"
+text = "Plant corn to create stronger towers"
 horizontal_alignment = 1
 vertical_alignment = 1
 

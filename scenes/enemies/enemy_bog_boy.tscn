@@ -51,17 +51,18 @@ size = Vector2(20, 16)
 
 [node name="Enemy" unique_id=371982480 instance=ExtResource("1_ckrjo")]
 modulate = Color(1, 1, 1, 1)
+collision_layer = 1
 speed = 30.0
 max_health = 120.0
 sprite_facing_deg = 0.0
 
 [node name="AnimatedSprite2D" parent="." index="0" unique_id=779821457]
-flip_v = true
 sprite_frames = SubResource("SpriteFrames_2ytov")
 animation = &"default"
 autoplay = "default"
 frame = 1
 frame_progress = 0.32301086
+flip_v = true
 
 [node name="CollisionShape2D" parent="." index="1" unique_id=1885304010]
 shape = SubResource("RectangleShape2D_crow")

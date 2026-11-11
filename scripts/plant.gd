@@ -1,4 +1,5 @@
 extends Node2D
+class_name TomatoPlant
 
 @export var growth_duration := 10.0
 

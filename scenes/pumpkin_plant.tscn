@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://bmb7jvyuo501a"]
+
+[ext_resource type="Script" uid="uid://bnbfib5hfn71f" path="res://scripts/pumpkin_plant.gd" id="1_t04fr"]
+[ext_resource type="Texture2D" uid="uid://dp2o3n440qaxg" path="res://assets/PumpkinPlant.png" id="2_t04fr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hejtt"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h3fyl"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j8e31"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kk5q2"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0ivh"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w50hb"]
+atlas = ExtResource("2_t04fr")
+region = Rect2(80, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2ywb8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hejtt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h3fyl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j8e31")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kk5q2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x0ivh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w50hb")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="PumpkinPlant" type="Node2D" unique_id=224582632]
+z_index = -5
+script = ExtResource("1_t04fr")
+
+[node name="SwayPivot" type="Node2D" parent="." unique_id=1429880015]
+position = Vector2(0, 12)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="SwayPivot" unique_id=580662078]
+position = Vector2(2, -13.999999)
+scale = Vector2(3.1, 3.1)
+sprite_frames = SubResource("SpriteFrames_2ywb8")
+frame_progress = 0.72582346

@@ -37,10 +37,12 @@ const SEED_DISPLAY_NAMES := {
 ## player can discover where each seed can be planted without opening a card.
 const SEED_PLACEMENT_HINTS := {
 	TOMATO_SEED_ID: "Click a tilled soil tile to plant a tomato",
-	CORN_SEED_ID: "Click a grass tile (off the enemy path) to plant",
-	PUMPKIN_SEED_ID: "Click an enemy path tile to plant",
+	CORN_SEED_ID: "Click a tilled soil tile to plant corn. Corn can create a powerful corn tower that attacks enemies..",
+	PUMPKIN_SEED_ID: "Click a tilled soil tile to plant a pumpkin. Pumpkins are placed on the enemy path to block them.",
 }
 const FRUIT_ITEM_ID := "tomato"
+const CORN_ITEM_ID := "corn"
+const PUMPKIN_ITEM_ID := "pumpkin"
 const CHEST_ITEM_ID := "godot_logo"
 const DEFAULT_TOMATO_GOAL := 10
 
@@ -142,7 +144,14 @@ func get_seed_count(seed_id: String) -> int:
 ## Every reserve currently shares the same cap. Kept as a function so we can
 ## specialize per seed later without touching every caller.
 func get_seed_max(_seed_id: String) -> int:
-	return MAX_STACK_SIZE
+	if (_seed_id == TOMATO_SEED_ID):
+		return MAX_STACK_SIZE
+	elif (_seed_id == CORN_SEED_ID):
+		return 15
+	elif (_seed_id == PUMPKIN_SEED_ID):
+		return 5
+	else:
+		return MAX_STACK_SIZE
 
 ## Add seeds to a specific reserve. Defaults to tomato so the pre-existing
 ## `add_seeds(amount)` calls (wave rewards, harvest drops) keep working.
